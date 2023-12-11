@@ -48,8 +48,12 @@ public class GestionPacientesImpl extends GestionPacientesPOA {
 
     @Override
     public pacienteDTO buscarPaciente(int numeroHabitacion) {
-        return null;
+        System.out.println("Invocando a consultar paciente");
+        pacienteDTO objPaciente = new pacienteDTO("", "", -1,-1);
+        if (this.pacientes.get(numeroHabitacion) != null) {
+            objPaciente = this.pacientes.get(numeroHabitacion);
+        }
+        return objPaciente;
     }
-
 
 }
