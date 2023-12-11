@@ -11,12 +11,13 @@ import servidor.Repositorios.PacienteRepositorioImpl;
 import servidor.controladores.ControladorGestorNotificacionInt;
 import servidor.controladores.ControladorGestorPacientesImpl;
 import servidor.controladores.ControladorGestorPacientesInt;
+import servidor.utilidades.RangosSalud;
 import servidorDeAlertas.sop_corba.GestionPacientesHelper;
 import servidorDeAlertas.sop_corba.GestionPacientesOperations;
 
 public class ServidorDeObjetos
 {
-    //private static ControladorGestorNotificacionInt objRemoto;
+    private static ControladorGestorNotificacionInt objRemoto;
     static GestionPacientesOperations ref;
 
     public static void main(String args[]) throws RemoteException
@@ -54,6 +55,9 @@ public class ServidorDeObjetos
             System.out.println("ERROR : " + e);
             e.printStackTrace(System.out);
         }
+        
+        RangosSalud notificacion = new RangosSalud(ref);
+        
         
         //Crear el repositorio
         PacienteRepositorioImpl objPacienteRepositoryImpl=new PacienteRepositorioImpl();

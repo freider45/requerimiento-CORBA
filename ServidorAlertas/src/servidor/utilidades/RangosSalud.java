@@ -1,32 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package servidor.utilidades;
 
 import servidor.DTO.SensoresDTO;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import servidor.DTO.Notificacion;
+import servidor.Repositorios.PacienteRepositorioImpl;
 import servidor.controladores.ControladorGestorNotificacionInt;
+import servidorDeAlertas.sop_corba.GestionPacientesOperations;
+import servidorDeAlertas.sop_corba.GestionPacientesPackage.pacienteDTO;
 
 /**
  *
  * @author Jorge
  */
-/*public class RangosSalud {
+public class RangosSalud {
 
-    static Notificacion objNotificacion = new Notificacion();
-    static ControladorGestorNotificacionInt objRemoto;
-    static SensoresDTO objSensoresAlerta = new SensoresDTO();
+    static  Notificacion objNotificacion = new Notificacion();
+    //static  ControladorGestorNotificacionInt objRemoto;
+    static  SensoresDTO objSensoresAlerta = new SensoresDTO();
+    static  PacienteRepositorioImpl objPacienteRepositoryImpl=new PacienteRepositorioImpl();
+    static  GestionPacientesOperations ref;
 
-    public RangosSalud(ControladorGestorNotificacionInt objRemoto) {
-        this.objRemoto = objRemoto;
+    public RangosSalud(GestionPacientesOperations ref) {
+        //this.objRemoto = objRemoto;
+        this.ref = ref;
     }
 
     public static int determinarRangoNormalFrecuenciaCardiaca(float edad, int frecuencia) {
@@ -120,21 +119,23 @@ import servidor.controladores.ControladorGestorNotificacionInt;
     }
 
     public static void tomarAccionesPuntuacion(SensoresDTO objSensoresDTO) throws RemoteException {
+        pacienteDTO paciente = new pacienteDTO();
+        paciente = ref.buscarPaciente(objSensoresDTO.getIdUsuario());
         int puntuacion = 0;
+        int edad = paciente.edad;
 
-        puntuacion += RangosSalud.determinarRangoNormalFrecuenciaCardiaca(objSensoresDTO.getPaciente().getEdad(), objSensoresDTO.getFrecuenciaCardiaca());
-        puntuacion += RangosSalud.determinarRangoNormalFrecuenciaRespiratoria(objSensoresDTO.getPaciente().getEdad(), objSensoresDTO.getFrecuenciaRespiratoria());
-        puntuacion += RangosSalud.determinarRangoNormalPresionArterialSistolica(objSensoresDTO.getPaciente().getEdad(), objSensoresDTO.getTensionArterialSistolica());
-        puntuacion += RangosSalud.determinarRangoNormalPresionArterialDiastolica(objSensoresDTO.getPaciente().getEdad(), objSensoresDTO.getTensionArterialDiastolica());
-        puntuacion += RangosSalud.determinarRangoNormalSaturacionOxigeno(objSensoresDTO.getPaciente().getEdad(), objSensoresDTO.getSaturacionOxigeno());
-        puntuacion += RangosSalud.determinarRangoNormalTemperatura(objSensoresDTO.getPaciente().getEdad(), objSensoresDTO.getTemperatura());
+        puntuacion += RangosSalud.determinarRangoNormalFrecuenciaCardiaca(edad, objSensoresDTO.getFrecuenciaCardiaca());
+        puntuacion += RangosSalud.determinarRangoNormalFrecuenciaRespiratoria(edad, objSensoresDTO.getFrecuenciaRespiratoria());
+        puntuacion += RangosSalud.determinarRangoNormalPresionArterialSistolica(edad, objSensoresDTO.getTensionArterialSistolica());
+        puntuacion += RangosSalud.determinarRangoNormalPresionArterialDiastolica(edad, objSensoresDTO.getTensionArterialDiastolica());
+        puntuacion += RangosSalud.determinarRangoNormalSaturacionOxigeno(edad, objSensoresDTO.getSaturacionOxigeno());
+        puntuacion += RangosSalud.determinarRangoNormalTemperatura(edad, objSensoresDTO.getTemperatura());
         System.out.println("Puntuacion: " + puntuacion);
-            objSensoresAlerta.setPaciente(objSensoresDTO.getPaciente());
         if (puntuacion >= 2) {
             Notificacion objNotificacion = new Notificacion(obtenerFechaHoraActual(), "La enfermera debe revisar el paciente", puntuacion, objSensoresAlerta);
 
-            objRemoto.enviarNotificacion(objNotificacion);
-            guardarAlertaTxt(objSensoresDTO, puntuacion);
+            //objRemoto.enviarNotificacion(objNotificacion);
+            objPacienteRepositoryImpl.almacenarDatosAlerta(objSensoresDTO, puntuacion, paciente, obtenerFechaHoraActual());
 
         }
 
@@ -144,32 +145,9 @@ import servidor.controladores.ControladorGestorNotificacionInt;
             System.out.println("La enfermera y el médico deben revisar al paciente");
             Notificacion objNotificacion = new Notificacion(obtenerFechaHoraActual(), "La enfermera y el medico debe revisar el paciente", puntuacion, objSensoresAlerta);
 
-            objRemoto.enviarNotificacion(objNotificacion);
+            //objRemoto.enviarNotificacion(objNotificacion);
         }
 
-    }
-
-    static void guardarAlertaTxt(SensoresDTO objSensoresDTO, int puntuacion) {
-        try {
-            File file = new File("historialDeAlertas.txt");
-
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-            BufferedWriter bw = new BufferedWriter(fw);
-
-            bw.write("No de habitación: " + objSensoresDTO.getPaciente().getNoHabitacion() + "\n");
-            bw.write("Nombres y apellidos del paciente: " + objSensoresDTO.getPaciente().getNombres() + " " + objSensoresDTO.getPaciente().getApellidos() + "\n");
-            bw.write("Fecha de la alerta: " + obtenerFechaHoraActual() + "\n");
-            bw.write("Puntuación: " + puntuacion + "\n");
-
-            bw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     static String obtenerFechaHoraActual() {
@@ -178,4 +156,3 @@ import servidor.controladores.ControladorGestorNotificacionInt;
         return now.format(formatter);
     }
 }
-*/
