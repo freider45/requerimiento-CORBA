@@ -33,6 +33,7 @@ abstract public class GestionPacientesHelper
       __typeCode = org.omg.CORBA.ORB.init ().create_interface_tc (servidorDeAlertas.sop_corba.GestionPacientesHelper.id (), "GestionPacientes");
     }
     return __typeCode;
+    
   }
 
   public static String id ()

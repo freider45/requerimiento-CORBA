@@ -6,9 +6,6 @@
 package servidor.controladores;
 
 import java.util.HashMap;
-import org.omg.CORBA.ORB;
-import org.omg.CosNaming.NamingContextExt;
-import org.omg.CosNaming.NamingContextExtHelper;
 import servidorDeUsuarios.sop_corba.GestionPacientesPOA;
 import servidorDeUsuarios.sop_corba.GestionPacientesPackage.pacienteDTO;
 
