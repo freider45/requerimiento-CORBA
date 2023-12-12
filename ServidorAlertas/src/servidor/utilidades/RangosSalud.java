@@ -121,6 +121,7 @@ public class RangosSalud {
     public static void tomarAccionesPuntuacion(SensoresDTO objSensoresDTO) throws RemoteException {
         pacienteDTO paciente = new pacienteDTO();
         paciente = ref.buscarPaciente(objSensoresDTO.getIdUsuario());
+        System.out.println(paciente.nombre);
         int puntuacion = 0;
         int edad = paciente.edad;
 

@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import servidor.DTO.SensoresDTO;
 import servidor.Repositorios.PacienteRepositoryInt;
+import servidor.utilidades.RangosSalud;
 
 public class ControladorGestorPacientesImpl 
         extends UnicastRemoteObject 
@@ -29,7 +30,7 @@ public class ControladorGestorPacientesImpl
                 objSensoresDTO.getTensionArterialDiastolica());
         System.out.println("\nSaturación de oxígeno: "+objSensoresDTO.getSaturacionOxigeno());
         System.out.println("\nTempertatura: "+objSensoresDTO.getTemperatura());
-        
+         RangosSalud.tomarAccionesPuntuacion(objSensoresDTO);
         return true;
     }
 
