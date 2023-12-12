@@ -26,20 +26,14 @@ public class GestionPacientesImpl extends GestionPacientesPOA {
     public boolean registrarPaciente(pacienteDTO objPaciente) {
         System.out.println("Invocando a registrar paciente");
         boolean bandera = false;
-        int band = 0;
 
         if (!pacientes.containsKey(objPaciente.numeroHabitacion)) {
             if(pacientes.size() < 5){
                 pacientes.put(objPaciente.numeroHabitacion, objPaciente);
                 bandera = true;
-                band = 1;
             }  
         }
-        System.out.println("\nPaciente registrado: ");
-        System.out.println("\nNum Habitacion: "+objPaciente.numeroHabitacion);
-        System.out.println("\nNombres: "+objPaciente.nombre);
-        System.out.println("\nApellidos: "+objPaciente.apellido);
-        System.out.println("\nEdad: "+objPaciente.edad+" años");
+        System.out.println("Paciente con identificacion "+objPaciente.numeroHabitacion+" registrado ");
         return bandera;
     }
 
@@ -49,6 +43,7 @@ public class GestionPacientesImpl extends GestionPacientesPOA {
         pacienteDTO objPaciente = new pacienteDTO("", "", -1,-1);
         if (this.pacientes.get(numeroHabitacion) != null) {
             objPaciente = this.pacientes.get(numeroHabitacion);
+            System.out.println("Paciente con identificacion "+numeroHabitacion+" encontrado");
         }
         return objPaciente;
     }

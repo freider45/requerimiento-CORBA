@@ -1,12 +1,17 @@
 
 package servidor.Repositorios;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import servidor.DTO.Notificacion;
 import servidor.DTO.SensoresDTO;
 import servidorDeAlertas.sop_corba.GestionPacientesOperations;
 import servidorDeAlertas.sop_corba.GestionPacientesPackage.pacienteDTO;
@@ -14,6 +19,8 @@ import servidorDeAlertas.sop_corba.GestionPacientesPackage.pacienteDTO;
 public class PacienteRepositorioImpl implements PacienteRepositoryInt {
 
     private LinkedList<SensoresDTO> objSensores;
+    private int contador = 0;
+    private Notificacion notificacion = new Notificacion();
     
     public PacienteRepositorioImpl(){
         objSensores=new LinkedList();
@@ -31,15 +38,75 @@ public class PacienteRepositorioImpl implements PacienteRepositoryInt {
             FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
             BufferedWriter bw = new BufferedWriter(fw);
 
-            bw.write("No de habitación: " + objSensoresDTO.getIdUsuario() + "\n");
-            bw.write("Nombres y apellidos del paciente: " + paciente.nombre + " " + paciente.apellido + "\n");
-            bw.write("Fecha de la alerta: " + fechaHora + "\n");
-            bw.write("Puntuación: " + puntuacion + "\n");
+            bw.write(paciente.numeroHabitacion+ ",");
+            bw.write(paciente.nombre + ",");
+            bw.write(paciente.apellido + ",");
+            bw.write(fechaHora + ",");
+            bw.write(puntuacion + "\n");
 
             bw.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public ArrayList<Notificacion> leerInformacionArchivo(int numHabitacion) {
+         int cantidad=0;
+        ArrayList<Notificacion> listaAlertas = new ArrayList<>();
+        ArrayList<Notificacion> alertas = new ArrayList<>();
+        BufferedReader br = null;
+
+        try {
+            br = new BufferedReader(new FileReader("historialDeAlertas.txt"));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                int identificacion = Integer.parseInt(parts[0]);
+                
+                if (identificacion == numHabitacion) {
+                    
+                    notificacion.setFechaHora(parts[3]);
+                    notificacion.setPuntuacion(Integer.parseInt(parts[4]));
+                    
+                    listaAlertas.add(notificacion);
+ 
+                    cantidad++;
+                   
+                }
+            }
+            if(cantidad>5){
+                cantidad=5;
+            }
+            int pos=0;
+            this.contador=cantidad;
+            this.notificacion.setCantidadAlertas(cantidad);
+            
+            for (int i = listaAlertas.size() - 1; i >= 0; i--) {
+                if(pos<5){
+                    alertas.add(listaAlertas.get(i));
+                    pos++;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return alertas;
+    }
+    
+    public int cantidad(){
+        return this.contador;
     }
 }

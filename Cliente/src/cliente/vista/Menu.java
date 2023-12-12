@@ -50,7 +50,8 @@ public class Menu {
 
     private void Opcion1() {
         String nombres, apellidos;
-        int opcion, noHabitacion, edad;
+        int opcion, noHabitacion;
+        float edad;
         System.out.println("\n============ Registro del paciente ==============");
         // Captura y validación del número de habitación
         do {

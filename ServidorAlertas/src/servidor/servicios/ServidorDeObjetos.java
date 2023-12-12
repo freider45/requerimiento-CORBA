@@ -1,6 +1,7 @@
 
 package servidor.servicios;
 
+import java.rmi.Remote;
 import servidor.utilidades.UtilidadesRegistroS;
 import servidor.utilidades.UtilidadesConsola;
 import java.rmi.RemoteException;
@@ -8,16 +9,14 @@ import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 import servidor.Repositorios.PacienteRepositorioImpl;
-import servidor.controladores.ControladorGestorNotificacionInt;
+import servidor.controladores.ControladorGestorEquiposNotificacionImpl;
 import servidor.controladores.ControladorGestorPacientesImpl;
-import servidor.controladores.ControladorGestorPacientesInt;
 import servidor.utilidades.RangosSalud;
 import servidorDeAlertas.sop_corba.GestionPacientesHelper;
 import servidorDeAlertas.sop_corba.GestionPacientesOperations;
 
 public class ServidorDeObjetos
 {
-    private static ControladorGestorNotificacionInt objRemoto;
     static GestionPacientesOperations ref;
 
     public static void main(String args[]) throws RemoteException
@@ -56,20 +55,18 @@ public class ServidorDeObjetos
             e.printStackTrace(System.out);
         }
         
-        RangosSalud notificacion = new RangosSalud(ref);
-        
-        
         //Crear el repositorio
         PacienteRepositorioImpl objPacienteRepositoryImpl=new PacienteRepositorioImpl();
-
         //Crear el objeto remoto
         ControladorGestorPacientesImpl objRemotoPacientes= new ControladorGestorPacientesImpl(objPacienteRepositoryImpl);
-    
+        ControladorGestorEquiposNotificacionImpl objRemotoNotificaciones = new 
+        ControladorGestorEquiposNotificacionImpl();
+        RangosSalud notificacion = new RangosSalud(ref, objRemotoNotificaciones);
         try
         {
-            //se lanza el ns si no existe
-           UtilidadesRegistroS.arrancarNS(numPuertoRMIRegistry);
-           UtilidadesRegistroS.RegistrarObjetoRemoto( objRemotoPacientes, direccionIpRMIRegistry, numPuertoRMIRegistry, "idGestorPacientes");            
+            UtilidadesRegistroS.arrancarNS(numPuertoRMIRegistry);
+                UtilidadesRegistroS.RegistrarObjetoRemoto((Remote)objRemotoPacientes, direccionIpRMIRegistry, numPuertoRMIRegistry, "objServicioGestionPacientes");
+                UtilidadesRegistroS.RegistrarObjetoRemoto((Remote)objRemotoNotificaciones,direccionIpRMIRegistry, numPuertoRMIRegistry,"idGestorNotificacion" );  
         } catch (Exception e)
         {
             System.err.println("No fue posible Arrancar el NS o Registrar el objeto remoto" +  e.getMessage());

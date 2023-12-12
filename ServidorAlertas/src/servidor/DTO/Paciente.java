@@ -1,26 +1,34 @@
-
 package servidor.DTO;
+
 import java.io.Serializable;
 
-public class UsuarioDTO implements Serializable {
-    private int noHabitacion;
+/**
+ *
+ * @author fre90
+ */
+public class Paciente implements Serializable{
+   private int identificacion;
     private String nombres;
     private String apellidos;
     private float edad;
 
-    public UsuarioDTO(int noHabitacion, String nombres, String apellidos, float edad) {
-        this.noHabitacion = noHabitacion;
+    public Paciente(int identificacion, String nombres, String apellidos, float edad) {
+        this.identificacion = identificacion;
         this.nombres = nombres;
         this.apellidos = apellidos;
-        this.edad = edad;
+        this.edad=edad;
+        
     }
 
-    public int getNoHabitacion() {
-        return noHabitacion;
+    public Paciente() {
     }
 
-    public void setNoHabitacion(int noHabitacion) {
-        this.noHabitacion = noHabitacion;
+    public int getIdentificacion() {
+        return identificacion;
+    }
+
+    public void setIdentificacion(int identificacion) {
+        this.identificacion = identificacion;
     }
 
     public String getNombres() {
@@ -46,6 +54,5 @@ public class UsuarioDTO implements Serializable {
     public void setEdad(float edad) {
         this.edad = edad;
     }
-    
-    
+ 
 }

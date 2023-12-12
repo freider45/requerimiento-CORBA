@@ -5,7 +5,7 @@ module sop_corba{
       string nombre;		
       string apellido;
       long numeroHabitacion;
-      long edad;
+      float edad;
     };
 
     pacienteDTO buscarPaciente(in long numeroHabitacion);

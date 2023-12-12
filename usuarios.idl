@@ -5,10 +5,9 @@ module sop_corba{
 		string nombre;		
 		string apellido;
 		long numeroHabitacion;
-		long edad;
+		float edad;
 	};
 	
     boolean registrarPaciente(in pacienteDTO objPaciente);
-	pacienteDTO buscarPaciente(in long numeroHabitacion);
    };
  };

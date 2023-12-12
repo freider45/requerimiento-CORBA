@@ -29,7 +29,7 @@ public class ClienteDeObjetos
             System.out.println("Cual es el número de puerto por el cual escucha el rmiregistry ");
             int numPuertoRMIRegistry = cliente.utilidades.UtilidadesConsola.leerEntero(); 
             
-            objRemoto =  (ControladorGestorPacientesInt) UtilidadesRegistroC.obtenerObjRemoto(vec[1],numPuertoRMIRegistry, "idGestorPacientes"  );
+            objRemoto =  (ControladorGestorPacientesInt) UtilidadesRegistroC.obtenerObjRemoto(vec[1],numPuertoRMIRegistry, "objServicioGestionPacientes"  );
 
             // se crea e inicia el ORB
             ORB orb = ORB.init(vec, null);

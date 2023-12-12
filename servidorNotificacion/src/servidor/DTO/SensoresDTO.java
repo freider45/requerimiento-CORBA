@@ -10,20 +10,20 @@ public class SensoresDTO implements Serializable{
     private int frecuenciaRespiratoria;
     private int saturacionOxigeno;
     private float temperatura;
-    private UsuarioDTO paciente;
+    private int identificacionUsuario;
     
     //Constructor
     public SensoresDTO() {
     }
 
-    public SensoresDTO(int frecuenciaCardiaca, int tensionArterialSistolica, int tensionArterialDiastolica, int frecuenciaRespiratoria, int saturacionOxigeno, float temperatura, UsuarioDTO paciente) {
+    public SensoresDTO(int frecuenciaCardiaca, int tensionArterialSistolica, int tensionArterialDiastolica, int frecuenciaRespiratoria, int saturacionOxigeno, float temperatura, int identificacionUsuario) {
         this.frecuenciaCardiaca = frecuenciaCardiaca;
         this.tensionArterialSistolica = tensionArterialSistolica;
         this.tensionArterialDiastolica = tensionArterialDiastolica;
         this.frecuenciaRespiratoria = frecuenciaRespiratoria;
         this.saturacionOxigeno = saturacionOxigeno;
         this.temperatura = temperatura;
-        this.paciente = paciente;
+        this.identificacionUsuario = identificacionUsuario;
     }
     
     //Metodos get and setter
@@ -75,12 +75,12 @@ public class SensoresDTO implements Serializable{
         this.temperatura = temperatura;
     }
 
-    public UsuarioDTO getPaciente() {
-        return paciente;
+    public int getIdUsuario() {
+        return identificacionUsuario;
     }
 
-    public void setPaciente(UsuarioDTO paciente) {
-        this.paciente = paciente;
+    public void setIdUsuario(int identificacionUsuario) {
+        this.identificacionUsuario = identificacionUsuario;
     }
     
 }

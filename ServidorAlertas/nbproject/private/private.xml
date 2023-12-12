@@ -3,14 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Jorge/Documents/requerimiento-CORBA/ServidorAlertas/src/servidor/controladores/ControladorGestorPacientesInt.java</file>
-            <file>file:/C:/Users/Jorge/Documents/requerimiento-CORBA/ServidorAlertas/src/servidorDeAlertas/sop_corba/GestionPacientesPOA.java</file>
-            <file>file:/C:/Users/Jorge/Documents/requerimiento-CORBA/ServidorAlertas/src/servidor/controladores/ControladorGestorNotificacionInt.java</file>
-            <file>file:/C:/Users/Jorge/Documents/requerimiento-CORBA/ServidorAlertas/src/servidor/utilidades/UtilidadesRegistroS.java</file>
-            <file>file:/C:/Users/Jorge/Documents/requerimiento-CORBA/ServidorAlertas/src/servidor/controladores/ControladorGestorPacientesImpl.java</file>
-            <file>file:/C:/Users/Jorge/Documents/requerimiento-CORBA/ServidorAlertas/src/servidor/servicios/ServidorDeObjetos.java</file>
-            <file>file:/C:/Users/Jorge/Documents/requerimiento-CORBA/ServidorAlertas/src/servidor/utilidades/RangosSalud.java</file>
-            <file>file:/C:/Users/Jorge/Documents/requerimiento-CORBA/ServidorAlertas/src/servidorDeAlertas/sop_corba/GestionPacientesOperations.java</file>
+            <file>file:/C:/Users/fre90/Documents/requerimiento-CORBA/ServidorAlertas/src/servidor/servicios/ServidorDeObjetos.java</file>
         </group>
     </open-files>
 </project-private>

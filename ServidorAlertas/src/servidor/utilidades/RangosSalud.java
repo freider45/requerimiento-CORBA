@@ -6,8 +6,9 @@ import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import servidor.DTO.Notificacion;
+import servidor.DTO.Paciente;
 import servidor.Repositorios.PacienteRepositorioImpl;
-import servidor.controladores.ControladorGestorNotificacionInt;
+import servidor.controladores.ControladorGestorEquiposNotificacionImpl;
 import servidorDeAlertas.sop_corba.GestionPacientesOperations;
 import servidorDeAlertas.sop_corba.GestionPacientesPackage.pacienteDTO;
 
@@ -17,14 +18,13 @@ import servidorDeAlertas.sop_corba.GestionPacientesPackage.pacienteDTO;
  */
 public class RangosSalud {
 
-    static  Notificacion objNotificacion = new Notificacion();
-    //static  ControladorGestorNotificacionInt objRemoto;
+    static  ControladorGestorEquiposNotificacionImpl objRemoto;
     static  SensoresDTO objSensoresAlerta = new SensoresDTO();
     static  PacienteRepositorioImpl objPacienteRepositoryImpl=new PacienteRepositorioImpl();
     static  GestionPacientesOperations ref;
 
-    public RangosSalud(GestionPacientesOperations ref) {
-        //this.objRemoto = objRemoto;
+    public RangosSalud(GestionPacientesOperations ref, ControladorGestorEquiposNotificacionImpl objRemoto) {
+        this.objRemoto = objRemoto;
         this.ref = ref;
     }
 
@@ -123,7 +123,8 @@ public class RangosSalud {
         paciente = ref.buscarPaciente(objSensoresDTO.getIdUsuario());
         System.out.println(paciente.nombre);
         int puntuacion = 0;
-        int edad = paciente.edad;
+        float edad = paciente.edad;
+        String mensaje = "";
 
         puntuacion += RangosSalud.determinarRangoNormalFrecuenciaCardiaca(edad, objSensoresDTO.getFrecuenciaCardiaca());
         puntuacion += RangosSalud.determinarRangoNormalFrecuenciaRespiratoria(edad, objSensoresDTO.getFrecuenciaRespiratoria());
@@ -132,23 +133,20 @@ public class RangosSalud {
         puntuacion += RangosSalud.determinarRangoNormalSaturacionOxigeno(edad, objSensoresDTO.getSaturacionOxigeno());
         puntuacion += RangosSalud.determinarRangoNormalTemperatura(edad, objSensoresDTO.getTemperatura());
         System.out.println("Puntuacion: " + puntuacion);
-        if (puntuacion >= 2) {
-            Notificacion objNotificacion = new Notificacion(obtenerFechaHoraActual(), "La enfermera debe revisar el paciente", puntuacion, objSensoresAlerta);
-
-            //objRemoto.enviarNotificacion(objNotificacion);
-            objPacienteRepositoryImpl.almacenarDatosAlerta(objSensoresDTO, puntuacion, paciente, obtenerFechaHoraActual());
-
-        }
-
         if (puntuacion == 2) {
-            System.out.println("La enfermera debe revisar al paciente");
+            mensaje = "La enfermera debe revisar al paciente";
         } else if (puntuacion >= 3) {
-            System.out.println("La enfermera y el médico deben revisar al paciente");
-            Notificacion objNotificacion = new Notificacion(obtenerFechaHoraActual(), "La enfermera y el medico debe revisar el paciente", puntuacion, objSensoresAlerta);
-
-            //objRemoto.enviarNotificacion(objNotificacion);
+            mensaje = "La enfermera y el médico deben revisar al paciente";
         }
-
+        if (puntuacion >= 2) {
+            objPacienteRepositoryImpl.almacenarDatosAlerta(objSensoresDTO, puntuacion, paciente, obtenerFechaHoraActual());
+            Paciente objPaciente = new Paciente(paciente.numeroHabitacion, paciente.nombre,paciente.apellido,paciente.edad);
+            Notificacion objNotificacion = new Notificacion(obtenerFechaHoraActual(), 
+                    mensaje, puntuacion, objSensoresAlerta, objPaciente, objPacienteRepositoryImpl.cantidad());
+            objNotificacion.setAlertas(objPacienteRepositoryImpl.leerInformacionArchivo(paciente.numeroHabitacion));
+            objRemoto.notificarEquiposSobreNuevaAlerta(objNotificacion);
+            
+        }
     }
 
     static String obtenerFechaHoraActual() {
